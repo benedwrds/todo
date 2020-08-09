@@ -1,36 +1,49 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { findAllByDisplayValue } from '@testing-library/react';
+import TodoComponent from "./TodoComponent";
+
 
 class App extends Component {
   constructor(props) {
-
-    super(props)
-
-    
+  super(props);
   this.state = {
     isClicked: false,
-    buttonValue: "true",
-    todos: []
+    text: '',
+    todos: [],
   }
 }
 
-clickState = () => {
-  this.setState({
-    isClicked: true, 
+  clickState = () => {
+    this.setState({
+    todos: [...this.state.todos, this.state.text],
+    text: ''
   })
-
 }
 
-valueInput = () => {
-
+  onChange = e => {
+    this.setState({
+      text: e.target.value
+    })
 }
+
+  deleteItem = (index) => () => {
+    let todoList = [...this.state.todos]
+    todoList.splice(index, 1)
+    this.setState({
+      todos: todoList
+    })
+  }
+
 render(){
   return(
   <div className="App">
-    <input{e.target.value}/>
-    <button onClick={clickState()}>{this.state.isClicked}</button>
+    <input value={this.state.text} onChange={this.onChange}/>
+    <button onClick={this.clickState}>{`${this.state.isClicked}`}</button>
+    <ul>
+      {this.state.todos.map((todo, index) => {
+        return <TodoComponent key={index} deleteButton={this.deleteItem(index)} listValue={todo}/>
+      })}
+    </ul>
   </div>
     );
   }
